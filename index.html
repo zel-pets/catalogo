@@ -113,7 +113,7 @@ select {
   border-radius:8px; padding:6px 24px 6px 10px; font-family:'Nunito',sans-serif;
   font-size:12px; font-weight:600; cursor:pointer; outline:none; white-space:nowrap; flex-shrink:0;
 }
-select.hidden { display:none; }
+select.hidden { display:none !important; }
 select option { background:#fff; color:var(--charcoal); }
 
 .btn-reset {
@@ -122,6 +122,25 @@ select option { background:#fff; color:var(--charcoal); }
   font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0; transition:background 0.2s;
 }
 .btn-reset:hover { background:#eeddd2; }
+
+/* Mobile filters grid */
+@media (max-width: 640px) {
+  .filters {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:8px;
+    overflow-x:visible;
+  }
+  .filters select {
+    width:100%; flex-shrink:unset; white-space:normal;
+    font-size:13px; padding:8px 26px 8px 10px;
+  }
+  .btn-reset {
+    grid-column: 1 / -1;
+    width:100%; text-align:center; padding:9px;
+    font-size:13px;
+  }
+}
 
 /* ── RESULTS BAR ── */
 .results-bar {

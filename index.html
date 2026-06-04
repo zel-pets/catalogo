@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lo pedimos, lo entregamos · Palmas Diamante</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:        #5a7d6a;
+  --sage-dark:   #3d5c4a;
+  --sage-light:  #e8f0eb;
+  --sage-mid:    #a8c4b0;
+  --cream:       #faf8f4;
+  --warm-white:  #ffffff;
+  --terra:       #c17f5a;
+  --terra-light: #f5ebe3;
+  --terra-dark:  #9a5e3a;
+  --charcoal:    #2e3a35;
+  --gray:        #6b7c74;
+  --gray-light:  #e4ebe7;
+  --border:      #d8e4dc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 65%, #7a9e89 100%);
+  padding: 32px 24px 24px; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before { content:''; position:absolute; top:-40px; right:-40px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.06); }
+.hero::after  { content:''; position:absolute; bottom:-30px; left:-30px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.05); }
+.hero-emoji { font-size:36px; margin-bottom:6px; }
+.hero-title { font-family:'Playfair Display',serif; color:#fff; font-size:25px; font-weight:700; line-height:1.25; margin-bottom:6px; }
+.hero-sub   { color:rgba(255,255,255,0.82); font-size:13px; margin-bottom:14px; }
+.hero-badges { display:flex; gap:7px; justify-content:center; flex-wrap:wrap; }
+.badge { background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.25); color:#fff; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:700; }
+
+/* ── ABOUT ── */
+.about-wrap { margin:14px 16px 0; }
+.about-toggle {
+  width:100%; text-align:left; background:var(--terra-light); border:1px solid #e5c9b8;
+  border-radius:12px; padding:12px 16px; font-family:'Nunito',sans-serif;
+  font-size:14px; font-weight:700; color:var(--terra-dark); cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between; transition:border-radius 0.2s;
+}
+.about-toggle.open { border-radius:12px 12px 0 0; }
+.about-toggle .arrow { transition:transform 0.25s; font-size:12px; }
+.about-toggle.open .arrow { transform:rotate(180deg); }
+.about-body {
+  background:var(--terra-light); border:1px solid #e5c9b8; border-top:none;
+  border-radius:0 0 12px 12px; padding:0 16px; max-height:0; overflow:hidden;
+  transition:max-height 0.35s ease, padding 0.25s;
+}
+.about-body.open { max-height:300px; padding:12px 16px 14px; }
+.about-text { font-size:13px; color:#5a3e2e; line-height:1.7; }
+
+/* ── ZONA ── */
+.zona {
+  background:var(--sage-light); border:1px solid var(--border);
+  margin:10px 16px 0; border-radius:12px; padding:12px 16px;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.zona-icon { font-size:18px; flex-shrink:0; margin-top:2px; }
+.zona-text { font-size:13px; color:var(--sage-dark); line-height:1.65; }
+.zona-text strong { font-weight:700; }
+
+/* ── SERVICIO ── */
+.servicio {
+  background:var(--warm-white); border:1px solid var(--border);
+  margin:10px 16px 0; border-radius:12px; padding:12px 16px;
+  display:flex; gap:10px; align-items:flex-start;
+  box-shadow:0 1px 6px rgba(46,58,53,0.06);
+}
+.servicio-icon { font-size:18px; flex-shrink:0; margin-top:2px; }
+.servicio-text { font-size:13px; color:var(--gray); line-height:1.65; }
+.servicio-text strong { color:var(--charcoal); }
+
+/* ── WHATSAPP ── */
+.wa-btn {
+  display:flex; align-items:center; justify-content:center; gap:9px;
+  margin:12px 16px 0; background:#25d366; color:#fff; border-radius:12px;
+  padding:12px 20px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
+  text-decoration:none; box-shadow:0 3px 12px rgba(37,211,102,0.25); transition:background 0.2s;
+}
+.wa-btn:hover { background:#1db954; }
+.wa-icon { font-size:20px; }
+
+/* ── STICKY SEARCH ── */
+.sticky-bar {
+  position:sticky; top:0; z-index:100; background:var(--warm-white);
+  border-bottom:1px solid var(--border); padding:12px 16px 10px;
+  box-shadow:0 2px 12px rgba(46,58,53,0.08); margin-top:14px;
+}
+.search-wrap { position:relative; margin-bottom:9px; }
+.search-wrap input {
+  width:100%; padding:9px 14px 9px 38px; border-radius:10px;
+  border:1.5px solid var(--border); background:var(--cream); color:var(--charcoal);
+  font-family:'Nunito',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s;
+}
+.search-wrap input:focus { border-color:var(--sage); }
+.search-wrap input::placeholder { color:var(--gray); }
+.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--sage-mid); font-size:15px; }
+
+.filters { display:flex; gap:7px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; align-items:center; }
+.filters::-webkit-scrollbar { display:none; }
+
+select {
+  appearance:none;
+  background:var(--sage-light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%235a7d6a'/%3E%3C/svg%3E") no-repeat right 8px center;
+  background-size:7px; color:var(--sage-dark); border:1.5px solid var(--border);
+  border-radius:8px; padding:6px 24px 6px 10px; font-family:'Nunito',sans-serif;
+  font-size:12px; font-weight:600; cursor:pointer; outline:none; white-space:nowrap; flex-shrink:0;
+}
+select.hidden { display:none; }
+select option { background:#fff; color:var(--charcoal); }
+
+.btn-reset {
+  background:var(--terra-light); color:var(--terra); border:1.5px solid #e5c9b8;
+  border-radius:8px; padding:6px 12px; font-family:'Nunito',sans-serif;
+  font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0; transition:background 0.2s;
+}
+.btn-reset:hover { background:#eeddd2; }
+
+/* ── RESULTS BAR ── */
+.results-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 16px 6px; font-size:12px; color:var(--gray);
+}
+.results-count strong { color:var(--charcoal); font-size:13px; }
+.legend { display:flex; gap:10px; font-size:11px; font-weight:600; }
+.legend-item { display:flex; align-items:center; gap:4px; color:var(--gray); }
+.dot { width:8px; height:8px; border-radius:50%; }
+.dot-green { background:var(--sage); }
+.dot-terra { background:var(--terra); }
+
+/* ── TABLE (desktop/tablet) ── */
+.table-wrap { padding:0 16px 110px; overflow-x:auto; }
+table { width:100%; border-collapse:collapse; min-width:520px; }
+thead th {
+  background:var(--warm-white); padding:9px 11px; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.06em; color:var(--gray); text-align:left;
+  border-bottom:2px solid var(--border); white-space:nowrap;
+}
+thead th.price-col { text-align:right; }
+thead th.hide-col  { display:none; }
+tbody tr { border-bottom:1px solid var(--gray-light); transition:background 0.12s; }
+tbody tr:hover { background:var(--sage-light); }
+tbody tr:last-child { border-bottom:none; }
+td { padding:9px 11px; font-size:13px; vertical-align:middle; }
+td.hide-col { display:none; }
+.td-nombre { font-weight:700; color:var(--charcoal); font-size:13px; }
+.td-meta   { color:var(--gray); font-size:11px; margin-top:2px; }
+.td-pres   { display:inline-block; background:var(--gray-light); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; color:var(--charcoal); white-space:nowrap; }
+.tag       { display:inline-block; border-radius:5px; padding:2px 7px; font-size:10px; font-weight:700; white-space:nowrap; margin:1px 2px 1px 0; }
+.tag-etapa { background:#e0f0e8; color:var(--sage-dark); }
+.tag-raza  { background:var(--terra-light); color:var(--terra-dark); }
+.price-regular { display:block; font-size:11px; font-weight:600; color:#bbb; text-decoration:line-through; text-align:right; margin-bottom:1px; }
+.price-efvo    { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--sage-dark); white-space:nowrap; }
+.price-tarjeta { font-family:'Playfair Display',serif; font-size:15px; font-weight:500; color:var(--terra); white-space:nowrap; }
+.price-label   { display:block; font-family:'Nunito',sans-serif; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; opacity:0.55; margin-top:2px; }
+.price-cell    { text-align:right; }
+.cat-dot       { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+/* ── CARDS (mobile) ── */
+.cards-wrap { display:none; padding:0 12px 110px; }
+.card {
+  background:var(--warm-white); border:1px solid var(--border); border-radius:14px;
+  margin-bottom:10px; padding:14px 15px; box-shadow:0 1px 6px rgba(46,58,53,0.06);
+}
+.card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.card-nombre { font-weight:700; font-size:14px; color:var(--charcoal); line-height:1.3; }
+.card-meta   { font-size:11px; color:var(--gray); margin-top:3px; }
+.card-pres   { display:inline-block; background:var(--gray-light); border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700; color:var(--charcoal); white-space:nowrap; flex-shrink:0; }
+.card-tags   { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:11px; }
+.card-prices { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.card-price-box {
+  border-radius:10px; padding:9px 12px; text-align:center;
+}
+.card-price-box.efvo   { background:var(--sage-light); }
+.card-price-box.tarjeta { background:var(--terra-light); }
+.card-regular  { font-size:10px; color:#bbb; text-decoration:line-through; font-weight:600; margin-bottom:1px; }
+.card-amount   { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; }
+.card-amount.efvo   { color:var(--sage-dark); }
+.card-amount.tarjeta { color:var(--terra); }
+.card-lbl      { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; opacity:0.55; margin-top:2px; }
+
+/* ── EMPTY ── */
+.empty { text-align:center; padding:52px 20px; color:var(--gray); display:none; }
+.empty-icon  { font-size:42px; margin-bottom:10px; }
+.empty-title { font-family:'Playfair Display',serif; font-size:17px; margin-bottom:4px; color:var(--charcoal); }
+.empty-sub   { font-size:13px; }
+
+/* ── FOOTER ── */
+.footer {
+  position:fixed; bottom:0; left:0; right:0; background:var(--warm-white);
+  border-top:1px solid var(--border); padding:9px 16px;
+  font-size:11px; color:var(--gray); text-align:center; line-height:1.7;
+  box-shadow:0 -2px 10px rgba(46,58,53,0.07);
+}
+.footer strong { color:var(--sage-dark); }
+
+/* ── RESPONSIVE BREAKPOINT ── */
+@media (max-width: 640px) {
+  .table-wrap { display:none; }
+  .cards-wrap { display:block; }
+  .results-bar { flex-direction:column; align-items:flex-start; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-emoji">🐾</div>
+  <div class="hero-title">Lo pedimos,<br>lo entregamos.</div>
+  <div class="hero-sub">Alimento y productos para tu mascota, directo a tu puerta</div>
+  <div class="hero-badges">
+    <span class="badge">🐶 Perros</span>
+    <span class="badge">🐱 Gatos</span>
+    <span class="badge">📦 A domicilio</span>
+    <span class="badge">💳 Efectivo o tarjeta</span>
+  </div>
+</div>
+
+<div class="about-wrap">
+  <button class="about-toggle" id="aboutToggle" onclick="toggleAbout()">
+    <span>👋 ¿Quién soy?</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="about-body" id="aboutBody">
+    <p class="about-text">
+      Soy tu vecino de <strong>Palmas Diamante</strong>. Esto es un emprendimiento personal que hago aparte de mi trabajo, con mucho gusto y dedicación. Mi objetivo es que tú y tu mascota tengan acceso a productos de calidad a precios que realmente convienen, sin necesidad de salir de casa.<br><br>
+      Cada pedido lo gestiono personalmente — no somos cadena, somos vecinos. 🐾
+    </p>
+  </div>
+</div>
+
+<div class="zona">
+  <div class="zona-icon">📍</div>
+  <div class="zona-text">
+    <strong>Precios especiales para Palmas Diamante y colonias cercanas de San Nicolás.</strong><br>
+    ¿Vives un poco más lejos? Con gusto te atiendo — solo contáctame para platicar sobre el envío y encontramos la mejor opción para ti.
+  </div>
+</div>
+
+<div class="servicio">
+  <div class="servicio-icon">🕑</div>
+  <div class="servicio-text">
+    <strong>Lo pedimos, lo entregamos.</strong> Recibimos pedidos de lunes a viernes hasta las <strong>2:00 pm</strong>, sujeto a confirmación de existencias. Una vez confirmado, tu pedido llega al <strong>día hábil siguiente</strong>.
+  </div>
+</div>
+
+<a class="wa-btn" href="https://wa.me/5218112345678?text=Hola,%20me%20interesa%20hacer%20un%20pedido%20%F0%9F%90%BE" target="_blank">
+  <span class="wa-icon">💬</span> Hacer un pedido por WhatsApp
+</a>
+
+<div class="sticky-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Buscar producto, marca, presentación…" oninput="filtrar()">
+  </div>
+  <div class="filters">
+    <select id="f-cat"   onchange="onCatChange()"></select>
+    <select id="f-marca" onchange="filtrar()"></select>
+    <select id="f-etapa" onchange="filtrar()" class="hidden"></select>
+    <select id="f-raza"  onchange="filtrar()" class="hidden"></select>
+    <button class="btn-reset" onclick="resetFiltros()">✕ Limpiar</button>
+  </div>
+</div>
+
+<div class="results-bar">
+  <div class="results-count" id="contador">Cargando…</div>
+  <div class="legend">
+    <div class="legend-item"><div class="dot dot-green"></div> Efvo/Transfer</div>
+    <div class="legend-item"><div class="dot dot-terra"></div> Tarjeta</div>
+  </div>
+</div>
+
+<!-- TABLE: desktop -->
+<div class="table-wrap">
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Presentación</th>
+        <th id="th-etapa" class="hide-col">Etapa</th>
+        <th id="th-raza"  class="hide-col">Raza / Tamaño</th>
+        <th class="price-col">💵 Efvo/Transfer</th>
+        <th class="price-col">💳 Tarjeta</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<!-- CARDS: mobile -->
+<div class="cards-wrap" id="cards"></div>
+
+<div class="empty" id="empty">
+  <div class="empty-icon">🔎</div>
+  <div class="empty-title">Sin resultados</div>
+  <div class="empty-sub">Intenta con otros filtros o limpia la búsqueda</div>
+</div>
+
+<div class="footer">
+  <strong>Lo pedimos, lo entregamos</strong> &nbsp;·&nbsp; Palmas Diamante, San Nicolás de los Garza &nbsp;·&nbsp; Precios en MXN
+</div>
+
+<script>
+const P = [{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"First Care","presentacion":"2kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"First Care","presentacion":"8kg","regular":1457,"efvo":1240,"tarjeta":1315},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"2kg","regular":329,"efvo":280,"tarjeta":300},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"5kg","regular":723,"efvo":615,"tarjeta":655},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"8kg","regular":1094,"efvo":930,"tarjeta":985},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"15kg","regular":1968,"efvo":1675,"tarjeta":1775},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"20kg","regular":2495,"efvo":2125,"tarjeta":2250},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"2kg","regular":289,"efvo":250,"tarjeta":265},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"5kg","regular":678,"efvo":580,"tarjeta":615},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"8kg","regular":1041,"efvo":885,"tarjeta":940},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"15kg","regular":1729,"efvo":1470,"tarjeta":1560},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"20kg","regular":2188,"efvo":1860,"tarjeta":1970},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Pequeñas","presentacion":"2kg","regular":401,"efvo":345,"tarjeta":365},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Pequeñas","presentacion":"8kg","regular":1372,"efvo":1170,"tarjeta":1235},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Pequeñas","presentacion":"2kg","regular":349,"efvo":300,"tarjeta":315},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Pequeñas","presentacion":"8kg","regular":1192,"efvo":1015,"tarjeta":1075},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Mini","presentacion":"1kg","regular":227,"efvo":195,"tarjeta":205},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Mini","presentacion":"3kg","regular":649,"efvo":555,"tarjeta":585},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Mini","presentacion":"1kg","regular":206,"efvo":180,"tarjeta":190},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Mini","presentacion":"3kg","regular":592,"efvo":505,"tarjeta":535},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Razas Mini","presentacion":"1kg","regular":232,"efvo":200,"tarjeta":210},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Razas Mini","presentacion":"3kg","regular":659,"efvo":565,"tarjeta":595},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"2kg","regular":454,"efvo":390,"tarjeta":410},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"8kg","regular":1472,"efvo":1255,"tarjeta":1325},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"15kg","regular":2180,"efvo":1855,"tarjeta":1965},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Raza Pequeña","presentacion":"2kg","regular":469,"efvo":400,"tarjeta":425},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Raza Pequeña","presentacion":"8kg","regular":1539,"efvo":1310,"tarjeta":1390},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"High Performance","presentacion":"8kg","regular":1180,"efvo":1005,"tarjeta":1065},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"High Performance","presentacion":"20kg","regular":2530,"efvo":2155,"tarjeta":2280},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"2kg","regular":463,"efvo":395,"tarjeta":420},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"8kg","regular":1572,"efvo":1340,"tarjeta":1415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"15kg","regular":2414,"efvo":2055,"tarjeta":2175},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Sensitive Skin Raza Pequeña","presentacion":"2kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Sensitive Skin Raza Pequeña","presentacion":"8kg","regular":1647,"efvo":1400,"tarjeta":1485},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"2kg","regular":463,"efvo":395,"tarjeta":420},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"8kg","regular":1572,"efvo":1340,"tarjeta":1415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"15kg","regular":2414,"efvo":2055,"tarjeta":2175},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Weight Control Raza Pequeña","presentacion":"2kg","regular":477,"efvo":410,"tarjeta":430},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Weight Control Raza Pequeña","presentacion":"8kg","regular":1643,"efvo":1400,"tarjeta":1480},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Renal Care","presentacion":"2kg","regular":459,"efvo":395,"tarjeta":415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Urinary Management","presentacion":"2kg","regular":433,"efvo":370,"tarjeta":390},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Urinary Management","presentacion":"5kg","regular":995,"efvo":850,"tarjeta":900},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Health","presentacion":"2kg","regular":476,"efvo":405,"tarjeta":430},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Health","presentacion":"5kg","regular":1063,"efvo":905,"tarjeta":960},{"cat":"Alimento Húmedo para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"Cachorro","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Adulto","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Senior","raza":"Todas las Razas","marca":"Nupec","producto":"Senior","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Alimento Húmedo para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Weight Control","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Relax","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Smart","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Dental Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Joint Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Training","presentacion":"180gr","regular":94,"efvo":85,"tarjeta":90},{"cat":"Alimento Seco para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"1.5kg","regular":306,"efvo":265,"tarjeta":280},{"cat":"Alimento Seco para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"3kg","regular":596,"efvo":510,"tarjeta":540},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"1.5kg","regular":272,"efvo":235,"tarjeta":245},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"3kg","regular":531,"efvo":455,"tarjeta":480},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"5kg","regular":855,"efvo":730,"tarjeta":770},{"cat":"Alimento Seco para Gato","etapa":"Senior","raza":"","marca":"Nupec","producto":"Felino Senior","presentacion":"1.5kg","regular":310,"efvo":265,"tarjeta":280},{"cat":"Alimento Seco para Gato","etapa":"Senior","raza":"","marca":"Nupec","producto":"Felino Senior","presentacion":"3kg","regular":612,"efvo":525,"tarjeta":555},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"1.5kg","regular":289,"efvo":250,"tarjeta":265},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"3kg","regular":569,"efvo":485,"tarjeta":515},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Weight Care","presentacion":"1.5kg","regular":270,"efvo":230,"tarjeta":245},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Weight Care","presentacion":"3kg","regular":529,"efvo":450,"tarjeta":480},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Renal Care","presentacion":"1.5kg","regular":360,"efvo":310,"tarjeta":325},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary Management","presentacion":"1.5kg","regular":350,"efvo":300,"tarjeta":315},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary Management","presentacion":"3kg","regular":665,"efvo":570,"tarjeta":600},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Digestive Health","presentacion":"1.5kg","regular":392,"efvo":335,"tarjeta":355},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Digestive Health","presentacion":"3kg","regular":722,"efvo":615,"tarjeta":650},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Indoor","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Chico 2-4kg","regular":333,"efvo":285,"tarjeta":300},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Mediano 4-10kg","regular":347,"efvo":300,"tarjeta":315},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Grande 10-25kg","regular":361,"efvo":310,"tarjeta":330},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Extra Grande","regular":402,"efvo":345,"tarjeta":365},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Extra Chico 2-3.5kg","regular":412,"efvo":355,"tarjeta":375},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Chico 3.6-7.5kg","regular":436,"efvo":375,"tarjeta":395},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Mediano 7.6-15kg","regular":461,"efvo":395,"tarjeta":420},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Grande 15.1-30kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Extra Grande 30.1-60kg","regular":551,"efvo":470,"tarjeta":500},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Chico (Menor 8kg)","regular":1082,"efvo":920,"tarjeta":975},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Grande (Mayor 8kg)","regular":1149,"efvo":980,"tarjeta":1035},{"cat":"Antipulgas para Gato","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Chico (Menor 8kg)","regular":1082,"efvo":920,"tarjeta":975}];
+
+const CAT_COLORS = {
+  "Alimento Seco para Perro":"#7a9e89","Alimento Húmedo para Perro":"#5a8fa8",
+  "Premios para Perro":"#c17f5a","Alimento Seco para Gato":"#9b7ec8",
+  "Alimento Húmedo para Gato":"#6aaec4","Antipulgas para Perro":"#4a9e7a","Antipulgas para Gato":"#8e6ec0"
+};
+
+function fmt(n) { return '$'+n.toLocaleString('es-MX'); }
+
+function toggleAbout() {
+  document.getElementById('aboutToggle').classList.toggle('open');
+  document.getElementById('aboutBody').classList.toggle('open');
+}
+
+// Populate initial category filter only
+function poblarCats() {
+  const sel = document.getElementById('f-cat');
+  sel.innerHTML = '<option value="">Todas las categorías</option>';
+  [...new Set(P.map(p=>p.cat))].sort().forEach(v => {
+    const o = document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o);
+  });
+}
+
+// Rebuild dependent filters based on a subset of products
+function poblarDependientes(subset) {
+  const rebuild = (id, vals, allLabel) => {
+    const sel = document.getElementById(id);
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">${allLabel}</option>`;
+    vals.forEach(v => { const o = document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
+    if (vals.includes(cur)) sel.value = cur;
+  };
+  rebuild('f-marca', [...new Set(subset.map(p=>p.marca).filter(Boolean))].sort(), 'Todas las marcas');
+  rebuild('f-etapa', [...new Set(subset.map(p=>p.etapa).filter(Boolean))].sort(), 'Todas las etapas');
+  rebuild('f-raza',  [...new Set(subset.map(p=>p.raza).filter(Boolean))].sort(),  'Todas las razas');
+}
+
+function onCatChange() {
+  const cat = document.getElementById('f-cat').value;
+  const subset = cat ? P.filter(p=>p.cat===cat) : P;
+  poblarDependientes(subset);
+  // reset dependent selects
+  ['f-marca','f-etapa','f-raza'].forEach(id => document.getElementById(id).value = '');
+  filtrar();
+}
+
+function filtrar() {
+  const q     = document.getElementById('search').value.toLowerCase().trim();
+  const cat   = document.getElementById('f-cat').value;
+  const marca = document.getElementById('f-marca').value;
+  const etapa = document.getElementById('f-etapa').value;
+  const raza  = document.getElementById('f-raza').value;
+
+  const res = P.filter(p => {
+    if (cat   && p.cat   !== cat)   return false;
+    if (marca && p.marca !== marca) return false;
+    if (etapa && p.etapa !== etapa) return false;
+    if (raza  && p.raza  !== raza)  return false;
+    if (q) {
+      const h = [p.producto,p.marca,p.cat,p.presentacion,p.etapa,p.raza].join(' ').toLowerCase();
+      if (!h.includes(q)) return false;
+    }
+    return true;
+  });
+
+  // Dynamic filters visibility
+  const hayEtapa = res.some(p=>p.etapa && p.etapa.trim()!=='');
+  const hayRaza  = res.some(p=>p.raza  && p.raza.trim() !=='');
+  document.getElementById('f-etapa').classList.toggle('hidden', !hayEtapa);
+  document.getElementById('f-raza').classList.toggle('hidden',  !hayRaza);
+  document.getElementById('th-etapa').classList.toggle('hide-col', !hayEtapa);
+  document.getElementById('th-raza').classList.toggle('hide-col',  !hayRaza);
+
+  // Counter
+  document.getElementById('contador').innerHTML = `<strong>${res.length}</strong> producto${res.length!==1?'s':''}`;
+
+  const empty = document.getElementById('empty');
+  if (!res.length) {
+    document.getElementById('tbody').innerHTML = '';
+    document.getElementById('cards').innerHTML = '';
+    empty.style.display = 'block'; return;
+  }
+  empty.style.display = 'none';
+
+  // TABLE rows
+  document.getElementById('tbody').innerHTML = res.map(p => {
+    const col    = CAT_COLORS[p.cat]||'#888';
+    const etCell = hayEtapa ? `<td>${p.etapa?`<span class="tag tag-etapa">${p.etapa}</span>`:'—'}</td>` : '';
+    const rzCell = hayRaza  ? `<td>${p.raza ?`<span class="tag tag-raza">${p.raza}</span>`  :'—'}</td>` : '';
+    const reg    = p.regular ? `<span class="price-regular">${fmt(p.regular)}</span>` : '';
+    return `<tr>
+      <td><div class="td-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
+          <div class="td-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div></td>
+      <td><span class="td-pres">${p.presentacion}</span></td>
+      ${etCell}${rzCell}
+      <td class="price-cell">${reg}<span class="price-efvo">${fmt(p.efvo)}</span><span class="price-label">Efvo / Transfer</span></td>
+      <td class="price-cell">${reg}<span class="price-tarjeta">${fmt(p.tarjeta)}</span><span class="price-label">Tarjeta</span></td>
+    </tr>`;
+  }).join('');
+
+  // CARDS (mobile)
+  document.getElementById('cards').innerHTML = res.map(p => {
+    const col  = CAT_COLORS[p.cat]||'#888';
+    const tags = [
+      p.etapa ? `<span class="tag tag-etapa">${p.etapa}</span>` : '',
+      p.raza  ? `<span class="tag tag-raza">${p.raza}</span>`   : ''
+    ].filter(Boolean).join('');
+    const reg = p.regular ? `<div class="card-regular">${fmt(p.regular)}</div>` : '';
+    return `<div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
+          <div class="card-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div>
+        </div>
+        <span class="card-pres">${p.presentacion}</span>
+      </div>
+      ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+      <div class="card-prices">
+        <div class="card-price-box efvo">
+          ${reg}<div class="card-amount efvo">${fmt(p.efvo)}</div>
+          <div class="card-lbl">💵 Efvo / Transfer</div>
+        </div>
+        <div class="card-price-box tarjeta">
+          ${reg}<div class="card-amount tarjeta">${fmt(p.tarjeta)}</div>
+          <div class="card-lbl">💳 Tarjeta</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function resetFiltros() {
+  document.getElementById('search').value='';
+  ['f-cat','f-marca','f-etapa','f-raza'].forEach(id=>document.getElementById(id).value='');
+  poblarDependientes(P);
+  filtrar();
+}
+
+// Init
+poblarCats();
+poblarDependientes(P);
+filtrar();
+</script>
+</body>
+</html>

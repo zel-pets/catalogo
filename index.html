@@ -206,7 +206,7 @@ td.hide-col { display:none; }
 .card-lbl      { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; opacity:0.55; margin-top:2px; }
 
 /* ── EMPTY ── */
-.empty { text-align:center; padding:52px 20px; color:var(--gray); display:none; }
+.empty { text-align:center; padding:32px 20px 120px; color:var(--gray); display:none; }
 .empty-icon  { font-size:42px; margin-bottom:10px; }
 .empty-title { font-family:'Playfair Display',serif; font-size:17px; margin-bottom:4px; color:var(--charcoal); }
 .empty-sub   { font-size:13px; }
@@ -318,12 +318,14 @@ td.hide-col { display:none; }
 
 <div class="empty" id="empty">
   <div class="empty-icon">🔎</div>
-  <div class="empty-title">Sin resultados</div>
-  <div class="empty-sub">Intenta con otros filtros o limpia la búsqueda</div>
+  <div class="empty-title">No encontramos ese producto</div>
+  <div class="empty-sub">Intenta con otros filtros o limpia la búsqueda.<br><br>
+  ¿No encuentras lo que buscas? Puede que lo maneje —<br>
+  <a href="https://wa.me/5218112345678?text=Hola,%20busco%20un%20producto%20que%20no%20encontr%C3%A9%20en%20el%20cat%C3%A1logo%20%F0%9F%90%BE" target="_blank" style="color:#c17f5a;font-weight:700;text-decoration:none;">contáctame por WhatsApp</a> y con gusto te ayudo.</div>
 </div>
 
 <div class="footer">
-  <strong>Lo pedimos, lo entregamos</strong> &nbsp;·&nbsp; Palmas Diamante, San Nicolás de los Garza &nbsp;·&nbsp; Precios en MXN
+  <strong>Lo pedimos, lo entregamos</strong> &nbsp;·&nbsp; Palmas Diamante, San Nicolás &nbsp;·&nbsp; <a href="https://wa.me/5218112345678?text=Hola,%20busco%20un%20producto%20que%20no%20encontr%C3%A9%20en%20el%20cat%C3%A1logo%20%F0%9F%90%BE" target="_blank" style="color:var(--terra);font-weight:700;text-decoration:none;">¿No encuentras algo? Escríbeme</a>
 </div>
 
 <script>
@@ -404,13 +406,19 @@ function filtrar() {
   // Counter
   document.getElementById('contador').innerHTML = `<strong>${res.length}</strong> producto${res.length!==1?'s':''}`;
 
-  const empty = document.getElementById('empty');
+  const empty    = document.getElementById('empty');
+  const tableWrap = document.querySelector('.table-wrap');
+  const cardsWrap = document.getElementById('cards');
   if (!res.length) {
     document.getElementById('tbody').innerHTML = '';
-    document.getElementById('cards').innerHTML = '';
+    cardsWrap.innerHTML = '';
+    tableWrap.style.display = 'none';
+    cardsWrap.style.display  = 'none';
     empty.style.display = 'block'; return;
   }
-  empty.style.display = 'none';
+  empty.style.display  = 'none';
+  tableWrap.style.display = '';
+  cardsWrap.style.display  = '';
 
   // TABLE rows
   document.getElementById('tbody').innerHTML = res.map(p => {

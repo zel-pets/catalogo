@@ -226,6 +226,92 @@ td.hide-col { display:none; }
   .cards-wrap { display:block; }
   .results-bar { flex-direction:column; align-items:flex-start; gap:6px; }
 }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(46,58,53,0.55); backdrop-filter:blur(3px);
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:var(--warm-white); border-radius:18px;
+  width:100%; max-width:420px; max-height:90vh;
+  overflow-y:auto; box-shadow:0 8px 40px rgba(46,58,53,0.18);
+  animation:modalIn 0.25s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.modal-img-wrap {
+  width:100%; height:200px; background:var(--sage-light);
+  border-radius:18px 18px 0 0; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-img-wrap img { width:100%; height:100%; object-fit:cover; }
+.modal-img-placeholder {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; opacity:0.5;
+}
+.modal-img-placeholder span { font-size:48px; }
+.modal-img-placeholder p { font-size:12px; font-weight:600; color:var(--gray); text-transform:uppercase; letter-spacing:0.05em; }
+.modal-body { padding:18px 20px 24px; }
+.modal-cat {
+  font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.06em; color:var(--sage); margin-bottom:6px;
+}
+.modal-nombre {
+  font-family:'Playfair Display',serif; font-size:20px;
+  font-weight:700; color:var(--charcoal); margin-bottom:4px; line-height:1.3;
+}
+.modal-marca { font-size:13px; color:var(--gray); margin-bottom:10px; }
+.modal-tags  { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
+.modal-desc  {
+  font-size:13px; color:var(--gray); line-height:1.7;
+  background:var(--cream); border-radius:10px; padding:12px 14px;
+  margin-bottom:16px;
+}
+.modal-desc.sin-desc { color:#bbb; font-style:italic; }
+.modal-prices {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px;
+}
+.modal-price-box { border-radius:12px; padding:12px; text-align:center; }
+.modal-price-box.efvo    { background:var(--sage-light); }
+.modal-price-box.tarjeta { background:var(--terra-light); }
+.modal-regular { font-size:11px; color:#bbb; text-decoration:line-through; font-weight:600; }
+.modal-amount  { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; }
+.modal-amount.efvo    { color:var(--sage-dark); }
+.modal-amount.tarjeta { color:var(--terra); }
+.modal-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; opacity:0.55; margin-top:2px; }
+.modal-wa {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:#25d366; color:#fff; border-radius:10px; padding:11px;
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
+  text-decoration:none; margin-bottom:10px;
+}
+.modal-close {
+  width:100%; background:var(--gray-light); color:var(--gray);
+  border:none; border-radius:10px; padding:10px;
+  font-family:'Nunito',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:background 0.2s;
+}
+.modal-close:hover { background:var(--border); }
+.btn-ver {
+  display:inline-block; background:var(--sage-light); color:var(--sage-dark);
+  border:none; border-radius:6px; padding:3px 9px;
+  font-family:'Nunito',sans-serif; font-size:11px; font-weight:700;
+  cursor:pointer; white-space:nowrap; transition:background 0.15s;
+}
+.btn-ver:hover { background:var(--sage-mid); color:#fff; }
+.card-ver {
+  display:block; width:100%; margin-top:10px;
+  background:var(--sage-light); color:var(--sage-dark);
+  border:none; border-radius:8px; padding:8px;
+  font-family:'Nunito',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:background 0.15s;
+}
+.card-ver:hover { background:var(--sage-mid); color:#fff; }
 </style>
 </head>
 <body>
@@ -329,6 +415,58 @@ td.hide-col { display:none; }
 </div>
 
 <script>
+
+function openModal(idx) {
+  const p = P[idx];
+  const fmt2 = n => '$'+n.toLocaleString('es-MX');
+
+  const imgWrap = document.getElementById('modalImgWrap');
+  if (p.imagen) {
+    imgWrap.innerHTML = `<img src="img/${p.imagen}" alt="${p.producto}" onerror="this.parentElement.innerHTML='<div class=\"modal-img-placeholder\">🐾</div>'">`;
+  } else {
+    imgWrap.innerHTML = '<div class="modal-img-placeholder"><span>🐾</span><p>Imagen próximamente</p></div>';
+  }
+
+  document.getElementById('modalCat').textContent    = p.cat;
+  document.getElementById('modalNombre').textContent = p.producto + ' · ' + p.presentacion;
+  document.getElementById('modalMarca').textContent  = p.marca;
+
+  const tags = [
+    p.etapa ? `<span class="tag tag-etapa">${p.etapa}</span>` : '',
+    p.raza  ? `<span class="tag tag-raza">${p.raza}</span>`   : ''
+  ].filter(Boolean).join('');
+  document.getElementById('modalTags').innerHTML = tags;
+
+  const descEl = document.getElementById('modalDesc');
+  if (p.descripcion) {
+    descEl.textContent = p.descripcion;
+    descEl.classList.remove('sin-desc');
+  } else {
+    descEl.textContent = 'Descripción próximamente.';
+    descEl.classList.add('sin-desc');
+  }
+
+  document.getElementById('modalReg1').textContent    = p.regular ? fmt2(p.regular) : '';
+  document.getElementById('modalReg2').textContent    = p.regular ? fmt2(p.regular) : '';
+  document.getElementById('modalEfvo').textContent    = fmt2(p.efvo);
+  document.getElementById('modalTarjeta').textContent = fmt2(p.tarjeta);
+
+  const msg = encodeURIComponent(`Hola, quiero pedir: ${p.producto} ${p.presentacion} (${p.marca}) 🐾`);
+  document.getElementById('modalWa').href = `https://wa.me/5218112345678?text=${msg}`;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+function closeModalBtn() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+
 const P = [{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"First Care","presentacion":"2kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"First Care","presentacion":"8kg","regular":1457,"efvo":1240,"tarjeta":1315},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"2kg","regular":329,"efvo":280,"tarjeta":300},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"5kg","regular":723,"efvo":615,"tarjeta":655},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"8kg","regular":1094,"efvo":930,"tarjeta":985},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"15kg","regular":1968,"efvo":1675,"tarjeta":1775},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Cachorro","presentacion":"20kg","regular":2495,"efvo":2125,"tarjeta":2250},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"2kg","regular":289,"efvo":250,"tarjeta":265},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"5kg","regular":678,"efvo":580,"tarjeta":615},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"8kg","regular":1041,"efvo":885,"tarjeta":940},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"15kg","regular":1729,"efvo":1470,"tarjeta":1560},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Adulto","presentacion":"20kg","regular":2188,"efvo":1860,"tarjeta":1970},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Pequeñas","presentacion":"2kg","regular":401,"efvo":345,"tarjeta":365},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Pequeñas","presentacion":"8kg","regular":1372,"efvo":1170,"tarjeta":1235},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Pequeñas","presentacion":"2kg","regular":349,"efvo":300,"tarjeta":315},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Pequeñas","presentacion":"8kg","regular":1192,"efvo":1015,"tarjeta":1075},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Mini","presentacion":"1kg","regular":227,"efvo":195,"tarjeta":205},{"cat":"Alimento Seco para Perro","etapa":"Cachorro","raza":"Raza Pequeña","marca":"Nupec","producto":"Cachorro Razas Mini","presentacion":"3kg","regular":649,"efvo":555,"tarjeta":585},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Mini","presentacion":"1kg","regular":206,"efvo":180,"tarjeta":190},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Adulto Razas Mini","presentacion":"3kg","regular":592,"efvo":505,"tarjeta":535},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Razas Mini","presentacion":"1kg","regular":232,"efvo":200,"tarjeta":210},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Razas Mini","presentacion":"3kg","regular":659,"efvo":565,"tarjeta":595},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"2kg","regular":454,"efvo":390,"tarjeta":410},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"8kg","regular":1472,"efvo":1255,"tarjeta":1325},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Senior","presentacion":"15kg","regular":2180,"efvo":1855,"tarjeta":1965},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Raza Pequeña","presentacion":"2kg","regular":469,"efvo":400,"tarjeta":425},{"cat":"Alimento Seco para Perro","etapa":"Senior","raza":"Raza Pequeña","marca":"Nupec","producto":"Senior Raza Pequeña","presentacion":"8kg","regular":1539,"efvo":1310,"tarjeta":1390},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"High Performance","presentacion":"8kg","regular":1180,"efvo":1005,"tarjeta":1065},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"High Performance","presentacion":"20kg","regular":2530,"efvo":2155,"tarjeta":2280},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"2kg","regular":463,"efvo":395,"tarjeta":420},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"8kg","regular":1572,"efvo":1340,"tarjeta":1415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Sensitive Skin","presentacion":"15kg","regular":2414,"efvo":2055,"tarjeta":2175},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Sensitive Skin Raza Pequeña","presentacion":"2kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Sensitive Skin Raza Pequeña","presentacion":"8kg","regular":1647,"efvo":1400,"tarjeta":1485},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"2kg","regular":463,"efvo":395,"tarjeta":420},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"8kg","regular":1572,"efvo":1340,"tarjeta":1415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Razas Medianas/Grandes","marca":"Nupec","producto":"Weight Control","presentacion":"15kg","regular":2414,"efvo":2055,"tarjeta":2175},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Weight Control Raza Pequeña","presentacion":"2kg","regular":477,"efvo":410,"tarjeta":430},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Raza Pequeña","marca":"Nupec","producto":"Weight Control Raza Pequeña","presentacion":"8kg","regular":1643,"efvo":1400,"tarjeta":1480},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Renal Care","presentacion":"2kg","regular":459,"efvo":395,"tarjeta":415},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Urinary Management","presentacion":"2kg","regular":433,"efvo":370,"tarjeta":390},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Urinary Management","presentacion":"5kg","regular":995,"efvo":850,"tarjeta":900},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Health","presentacion":"2kg","regular":476,"efvo":405,"tarjeta":430},{"cat":"Alimento Seco para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Health","presentacion":"5kg","regular":1063,"efvo":905,"tarjeta":960},{"cat":"Alimento Húmedo para Perro","etapa":"Cachorro","raza":"Todas las Razas","marca":"Nupec","producto":"Cachorro","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Adulto","raza":"Todas las Razas","marca":"Nupec","producto":"Adulto","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Senior","raza":"Todas las Razas","marca":"Nupec","producto":"Senior","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Alimento Húmedo para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Weight Control","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Relax","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Smart","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Dental Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Digestive Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Joint Care","presentacion":"180gr","regular":108,"efvo":95,"tarjeta":100},{"cat":"Premios para Perro","etapa":"Todas las Etapas","raza":"Todas las Razas","marca":"Nupec","producto":"Training","presentacion":"180gr","regular":94,"efvo":85,"tarjeta":90},{"cat":"Alimento Seco para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"1.5kg","regular":306,"efvo":265,"tarjeta":280},{"cat":"Alimento Seco para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"3kg","regular":596,"efvo":510,"tarjeta":540},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"1.5kg","regular":272,"efvo":235,"tarjeta":245},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"3kg","regular":531,"efvo":455,"tarjeta":480},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Adult Indoor","presentacion":"5kg","regular":855,"efvo":730,"tarjeta":770},{"cat":"Alimento Seco para Gato","etapa":"Senior","raza":"","marca":"Nupec","producto":"Felino Senior","presentacion":"1.5kg","regular":310,"efvo":265,"tarjeta":280},{"cat":"Alimento Seco para Gato","etapa":"Senior","raza":"","marca":"Nupec","producto":"Felino Senior","presentacion":"3kg","regular":612,"efvo":525,"tarjeta":555},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"1.5kg","regular":289,"efvo":250,"tarjeta":265},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"3kg","regular":569,"efvo":485,"tarjeta":515},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Weight Care","presentacion":"1.5kg","regular":270,"efvo":230,"tarjeta":245},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Weight Care","presentacion":"3kg","regular":529,"efvo":450,"tarjeta":480},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Renal Care","presentacion":"1.5kg","regular":360,"efvo":310,"tarjeta":325},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary Management","presentacion":"1.5kg","regular":350,"efvo":300,"tarjeta":315},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary Management","presentacion":"3kg","regular":665,"efvo":570,"tarjeta":600},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Digestive Health","presentacion":"1.5kg","regular":392,"efvo":335,"tarjeta":355},{"cat":"Alimento Seco para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Digestive Health","presentacion":"3kg","regular":722,"efvo":615,"tarjeta":650},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Indoor","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Gato","etapa":"Gatito","raza":"","marca":"Nupec","producto":"Felino Kitten","presentacion":"16 Latas","regular":504,"efvo":430,"tarjeta":455},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Urinary","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Alimento Húmedo para Gato","etapa":"Adulto","raza":"","marca":"Nupec","producto":"Felino Hairball","presentacion":"16 Latas","regular":512,"efvo":440,"tarjeta":465},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Chico 2-4kg","regular":333,"efvo":285,"tarjeta":300},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Mediano 4-10kg","regular":347,"efvo":300,"tarjeta":315},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Grande 10-25kg","regular":361,"efvo":310,"tarjeta":330},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard","presentacion":"Extra Grande","regular":402,"efvo":345,"tarjeta":365},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Extra Chico 2-3.5kg","regular":412,"efvo":355,"tarjeta":375},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Chico 3.6-7.5kg","regular":436,"efvo":375,"tarjeta":395},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Mediano 7.6-15kg","regular":461,"efvo":395,"tarjeta":420},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Grande 15.1-30kg","regular":487,"efvo":415,"tarjeta":440},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Boehringer","producto":"Nexgard Spectra","presentacion":"Extra Grande 30.1-60kg","regular":551,"efvo":470,"tarjeta":500},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Chico (Menor 8kg)","regular":1082,"efvo":920,"tarjeta":975},{"cat":"Antipulgas para Perro","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Grande (Mayor 8kg)","regular":1149,"efvo":980,"tarjeta":1035},{"cat":"Antipulgas para Gato","etapa":"","raza":"","marca":"Elanco","producto":"Seresto","presentacion":"Chico (Menor 8kg)","regular":1082,"efvo":920,"tarjeta":975}];
 
 const CAT_COLORS = {
@@ -421,7 +559,7 @@ function filtrar() {
   cardsWrap.style.display  = '';
 
   // TABLE rows
-  document.getElementById('tbody').innerHTML = res.map(p => {
+  document.getElementById('tbody').innerHTML = res.map((p) => { const idx = P.indexOf(p);
     const col    = CAT_COLORS[p.cat]||'#888';
     const etCell = hayEtapa ? `<td>${p.etapa?`<span class="tag tag-etapa">${p.etapa}</span>`:'—'}</td>` : '';
     const rzCell = hayRaza  ? `<td>${p.raza ?`<span class="tag tag-raza">${p.raza}</span>`  :'—'}</td>` : '';
@@ -429,7 +567,7 @@ function filtrar() {
     return `<tr>
       <td><div class="td-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
           <div class="td-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div></td>
-      <td><span class="td-pres">${p.presentacion}</span></td>
+      <td><span class="td-pres">${p.presentacion}</span><br><button class="btn-ver" onclick="openModal(${idx})">Ver más</button></td>
       ${etCell}${rzCell}
       <td class="price-cell">${reg}<span class="price-efvo">${fmt(p.efvo)}</span><span class="price-label">Efvo / Transfer</span></td>
       <td class="price-cell">${reg}<span class="price-tarjeta">${fmt(p.tarjeta)}</span><span class="price-label">Tarjeta</span></td>
@@ -437,7 +575,7 @@ function filtrar() {
   }).join('');
 
   // CARDS (mobile)
-  document.getElementById('cards').innerHTML = res.map(p => {
+  document.getElementById('cards').innerHTML = res.map((p) => { const idx = P.indexOf(p);
     const col  = CAT_COLORS[p.cat]||'#888';
     const tags = [
       p.etapa ? `<span class="tag tag-etapa">${p.etapa}</span>` : '',
@@ -463,6 +601,7 @@ function filtrar() {
           <div class="card-lbl">💳 Tarjeta</div>
         </div>
       </div>
+      <button class="card-ver" onclick="openModal(${idx})">Ver más +</button>
     </div>`;
   }).join('');
 }
@@ -479,5 +618,36 @@ poblarCats();
 poblarDependientes(P);
 filtrar();
 </script>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-img-wrap" id="modalImgWrap">
+      <div class="modal-img-placeholder"><span>🐾</span><p>Imagen próximamente</p></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cat"  id="modalCat"></div>
+      <div class="modal-nombre" id="modalNombre"></div>
+      <div class="modal-marca"  id="modalMarca"></div>
+      <div class="modal-tags"   id="modalTags"></div>
+      <div class="modal-desc"   id="modalDesc"></div>
+      <div class="modal-prices">
+        <div class="modal-price-box efvo">
+          <div class="modal-regular" id="modalReg1"></div>
+          <div class="modal-amount efvo" id="modalEfvo"></div>
+          <div class="modal-lbl">💵 Efvo / Transfer</div>
+        </div>
+        <div class="modal-price-box tarjeta">
+          <div class="modal-regular" id="modalReg2"></div>
+          <div class="modal-amount tarjeta" id="modalTarjeta"></div>
+          <div class="modal-lbl">💳 Tarjeta</div>
+        </div>
+      </div>
+      <a class="modal-wa" id="modalWa" href="#" target="_blank">💬 Pedir por WhatsApp</a>
+      <button class="modal-close" onclick="closeModalBtn()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

@@ -245,11 +245,11 @@ td.hide-col { display:none; }
   to   { opacity:1; transform:translateY(0); }
 }
 .modal-img-wrap {
-  width:100%; height:200px; background:var(--sage-light);
+  width:100%; height:260px; background:#f8f8f8;
   border-radius:18px 18px 0 0; overflow:hidden;
   display:flex; align-items:center; justify-content:center;
 }
-.modal-img-wrap img { width:100%; height:100%; object-fit:cover; }
+.modal-img-wrap img { width:100%; height:100%; object-fit:contain; background:#f8f8f8; }
 .modal-img-placeholder {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:8px; opacity:0.5;
@@ -422,7 +422,15 @@ function openModal(idx) {
 
   const imgWrap = document.getElementById('modalImgWrap');
   if (p.imagen) {
-    imgWrap.innerHTML = `<img src="img/${p.imagen}" alt="${p.producto}" onerror="this.parentElement.innerHTML='<div class=\"modal-img-placeholder\">🐾</div>'">`;
+    const img = document.createElement('img');
+    img.src = 'img/' + p.imagen;
+    img.alt = p.producto;
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+    img.onerror = function() {
+      imgWrap.innerHTML = '<div class="modal-img-placeholder"><span>🐾</span><p>Imagen próximamente</p></div>';
+    };
+    imgWrap.innerHTML = '';
+    imgWrap.appendChild(img);
   } else {
     imgWrap.innerHTML = '<div class="modal-img-placeholder"><span>🐾</span><p>Imagen próximamente</p></div>';
   }

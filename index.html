@@ -200,6 +200,17 @@ td.hide-col { display:none; }
 .card-price-box.efvo   { background:var(--sage-light); }
 .card-price-box.tarjeta { background:var(--terra-light); }
 .card-regular  { font-size:10px; color:#bbb; text-decoration:line-through; font-weight:600; margin-bottom:1px; }
+.card-thumb {
+  width:52px; height:52px; border-radius:8px; flex-shrink:0;
+  overflow:hidden; background:var(--gray-light);
+  display:flex; align-items:center; justify-content:center;
+}
+.card-thumb img { width:100%; height:100%; object-fit:contain; }
+.card-thumb-placeholder { font-size:22px; opacity:0.3; }
+.card-precio-regular {
+  font-size:11px; color:#bbb; text-decoration:line-through;
+  font-weight:600; margin-bottom:8px;
+}
 .card-amount   { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; }
 .card-amount.efvo   { color:var(--sage-dark); }
 .card-amount.tarjeta { color:var(--terra); }
@@ -501,6 +512,9 @@ function toggleAbout() {
 }
 
 // Populate initial category filter only
+function thumbError(el) {
+  el.parentElement.innerHTML = '<span class="card-thumb-placeholder">🐾</span>';
+}
 function poblarCats() {
   const sel = document.getElementById('f-cat');
   sel.innerHTML = '<option value="">Todas las categorías</option>';
@@ -599,23 +613,30 @@ function filtrar() {
       p.etapa ? `<span class="tag tag-etapa">${p.etapa}</span>` : '',
       p.raza  ? `<span class="tag tag-raza">${p.raza}</span>`   : ''
     ].filter(Boolean).join('');
-    const reg = p.regular ? `<div class="card-regular">${fmt(p.regular)}</div>` : '';
+    const reg = p.regular ? `<div class="card-precio-regular">Precio regular: ${fmt(p.regular)}</div>` : '';
+    const thumb = p.imagen
+      ? `<div class="card-thumb"><img src="img/${p.imagen}" alt="${p.producto}" onerror="thumbError(this)"></div>`
+      : '';
     return `<div class="card">
       <div class="card-header">
-        <div>
-          <div class="card-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
-          <div class="card-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div>
+        <div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;">
+          ${thumb}
+          <div style="min-width:0;">
+            <div class="card-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
+            <div class="card-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div>
+          </div>
         </div>
-        <span class="card-pres">${p.presentacion}</span>
+        <span class="card-pres" style="flex-shrink:0;">${p.presentacion}</span>
       </div>
       ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+      ${reg}
       <div class="card-prices">
         <div class="card-price-box efvo">
-          ${reg}<div class="card-amount efvo">${fmt(p.efvo)}</div>
+          <div class="card-amount efvo">${fmt(p.efvo)}</div>
           <div class="card-lbl">💵 Efvo / Transfer</div>
         </div>
         <div class="card-price-box tarjeta">
-          ${reg}<div class="card-amount tarjeta">${fmt(p.tarjeta)}</div>
+          <div class="card-amount tarjeta">${fmt(p.tarjeta)}</div>
           <div class="card-lbl">💳 Tarjeta</div>
         </div>
       </div>

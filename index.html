@@ -250,6 +250,10 @@ td.hide-col { display:none; }
   display:flex; align-items:center; justify-content:center;
 }
 .modal-img-wrap img { width:100%; height:100%; object-fit:contain; background:#f8f8f8; }
+.modal-img-ref {
+  text-align:center; font-size:10px; color:#bbb;
+  font-style:italic; padding:5px 16px 0; letter-spacing:0.02em;
+}
 .modal-img-placeholder {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:8px; opacity:0.5;
@@ -638,6 +642,7 @@ filtrar();
     <div class="modal-img-wrap" id="modalImgWrap">
       <div class="modal-img-placeholder"><span>🐾</span><p>Imagen próximamente</p></div>
     </div>
+  <div class="modal-img-ref">Imagen de referencia. El producto, presentación o empaque pueden variar sin previo aviso.</div>
     <div class="modal-body">
       <div class="modal-cat"  id="modalCat"></div>
       <div class="modal-nombre" id="modalNombre"></div>

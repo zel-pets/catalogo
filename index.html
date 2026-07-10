@@ -171,7 +171,7 @@ td { padding:9px 11px; font-size:13px; vertical-align:middle; }
 td.hide-col { display:none; }
 .td-nombre { font-weight:700; color:var(--charcoal); font-size:13px; }
 .td-meta   { color:var(--gray); font-size:11px; margin-top:2px; }
-.td-pres   { display:inline-block; background:var(--gray-light); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; color:var(--charcoal); white-space:nowrap; }
+.td-pres   { display:inline-block; background:#ffffff; border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; color:var(--charcoal); white-space:nowrap; }
 .tag       { display:inline-block; border-radius:5px; padding:2px 7px; font-size:10px; font-weight:700; white-space:nowrap; margin:1px 2px 1px 0; }
 .tag-etapa { background:#e0f0e8; color:var(--sage-dark); }
 .tag-raza  { background:var(--terra-light); color:var(--terra-dark); }
@@ -191,7 +191,7 @@ td.hide-col { display:none; }
 .card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
 .card-nombre { font-weight:700; font-size:14px; color:var(--charcoal); line-height:1.3; }
 .card-meta   { font-size:11px; color:var(--gray); margin-top:3px; }
-.card-pres   { display:inline-block; background:var(--gray-light); border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700; color:var(--charcoal); white-space:nowrap; flex-shrink:0; }
+.card-pres   { display:inline-block; background:#ffffff; border-radius:6px; padding:3px 9px; font-size:12px; font-weight:700; color:var(--charcoal); white-space:nowrap; flex-shrink:0; }
 .card-tags   { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:11px; }
 .card-prices { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .card-price-box {
@@ -202,13 +202,13 @@ td.hide-col { display:none; }
 .card-regular  { font-size:10px; color:#bbb; text-decoration:line-through; font-weight:600; margin-bottom:1px; }
 .card-thumb {
   width:52px; height:52px; border-radius:8px; flex-shrink:0;
-  overflow:hidden; background:var(--gray-light);
+  overflow:hidden; background:#ffffff;
   display:flex; align-items:center; justify-content:center;
 }
 .card-thumb img { width:100%; height:100%; object-fit:contain; }
 .card-thumb-placeholder { font-size:22px; opacity:0.3; }
 .card-precio-regular {
-  font-size:11px; color:#bbb; text-decoration:line-through;
+  font-size:13px; color:#bbb; text-decoration:line-through;
   font-weight:600; margin-bottom:8px;
 }
 .card-amount   { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; }
@@ -256,11 +256,11 @@ td.hide-col { display:none; }
   to   { opacity:1; transform:translateY(0); }
 }
 .modal-img-wrap {
-  width:100%; height:160px; background:#f8f8f8;
+  width:100%; height:160px; background:#ffffff;
   border-radius:18px 18px 0 0; overflow:hidden;
   display:flex; align-items:center; justify-content:center;
 }
-.modal-img-wrap img { width:100%; height:100%; object-fit:contain; background:#f8f8f8; }
+.modal-img-wrap img { width:100%; height:100%; object-fit:contain; background:#ffffff; }
 .modal-img-ref {
   text-align:center; font-size:10px; color:#bbb;
   font-style:italic; padding:5px 16px 0; letter-spacing:0.02em;
@@ -306,7 +306,7 @@ td.hide-col { display:none; }
   text-decoration:none; margin-bottom:10px;
 }
 .modal-close {
-  width:100%; background:var(--gray-light); color:var(--gray);
+  width:100%; background:#ffffff; color:var(--gray);
   border:none; border-radius:10px; padding:10px;
   font-family:'Nunito',sans-serif; font-size:13px; font-weight:700;
   cursor:pointer; transition:background 0.2s;
@@ -514,7 +514,7 @@ function toggleAbout() {
 
 // Populate initial category filter only
 function thumbError(el) {
-  el.parentElement.innerHTML = '<span class="card-thumb-placeholder">🐾</span>';
+  el.parentElement.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><span style="font-size:18px;opacity:0.3;">🐾</span><span style="font-size:8px;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;text-align:center;line-height:1.2;">Imagen<br>en breve</span></div>';
 }
 function poblarCats() {
   const sel = document.getElementById('f-cat');
@@ -617,7 +617,7 @@ function filtrar() {
     const reg = p.regular ? `<div class="card-precio-regular">Precio regular: ${fmt(p.regular)}</div>` : '';
     const thumb = p.imagen
       ? `<div class="card-thumb"><img src="img/${p.imagen}" alt="${p.producto}" onerror="thumbError(this)"></div>`
-      : '';
+      : `<div class="card-thumb"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;height:100%;"><span style="font-size:18px;opacity:0.3;">🐾</span><span style="font-size:8px;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;text-align:center;line-height:1.2;">Imagen<br>en breve</span></div></div>`;
     return `<div class="card">
       <div class="card-header">
         <div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;">

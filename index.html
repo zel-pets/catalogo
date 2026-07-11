@@ -181,6 +181,13 @@ td.hide-col { display:none; }
 .price-label   { display:block; font-family:'Nunito',sans-serif; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; opacity:0.55; margin-top:2px; }
 .price-cell    { text-align:right; }
 .cat-dot       { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+.td-thumb {
+  width:48px; height:48px; border-radius:7px; overflow:hidden;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; border:1px solid var(--border);
+}
+.td-thumb img { width:100%; height:100%; object-fit:contain; }
+.td-thumb-placeholder { font-size:14px; opacity:0.25; text-align:center; line-height:1.2; font-size:10px; color:#ccc; }
 
 /* ── CARDS (mobile) ── */
 .cards-wrap { display:none; padding:0 12px 110px; }
@@ -403,6 +410,7 @@ td.hide-col { display:none; }
   <table id="tabla">
     <thead>
       <tr>
+        <th style="width:60px;"></th>
         <th>Producto</th>
         <th>Presentación</th>
         <th id="th-etapa" class="hide-col">Etapa</th>
@@ -513,6 +521,9 @@ function toggleAbout() {
 }
 
 // Populate initial category filter only
+function tdThumbError(el) {
+  el.parentElement.innerHTML = '<div class="td-thumb-placeholder">🐾<br>pronto</div>';
+}
 function thumbError(el) {
   el.parentElement.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><span style="font-size:18px;opacity:0.3;">🐾</span><span style="font-size:8px;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;text-align:center;line-height:1.2;">Imagen<br>en breve</span></div>';
 }
@@ -597,7 +608,11 @@ function filtrar() {
     const etCell = hayEtapa ? `<td>${p.etapa?`<span class="tag tag-etapa">${p.etapa}</span>`:'—'}</td>` : '';
     const rzCell = hayRaza  ? `<td>${p.raza ?`<span class="tag tag-raza">${p.raza}</span>`  :'—'}</td>` : '';
     const reg    = p.regular ? `<span class="price-regular">${fmt(p.regular)}</span>` : '';
+    const tdThumb = p.imagen
+      ? `<td><div class="td-thumb"><img src="img/${p.imagen}" alt="${p.producto}" onerror="tdThumbError(this)"></div></td>`
+      : `<td><div class="td-thumb"><div class="td-thumb-placeholder">🐾<br>pronto</div></div></td>`;
     return `<tr>
+      ${tdThumb}
       <td><div class="td-nombre"><span class="cat-dot" style="background:${col}"></span>${p.producto}</div>
           <div class="td-meta">${p.marca} · <span style="font-size:10px;color:#bbb">${p.cat}</span></div></td>
       <td><span class="td-pres">${p.presentacion}</span><br><button class="btn-ver" onclick="openModal(${idx})">Ver más</button></td>
